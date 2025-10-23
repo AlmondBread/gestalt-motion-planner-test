@@ -55,6 +55,10 @@ jobs:
           echo "==== Searching for boost_systemConfig.cmake or boost_system-config.cmake ===="
           find /usr/local -type f \( -name "boost_systemConfig.cmake" -o -name "boost_system-config.cmake" \) || echo "No per-component BoostConfig found"
 
+          echo "==== /usr/local/lib/cmake/Boost-1.89.0/ directory tree ===="
+          brew install tree || true
+          tree /usr/local/lib/cmake/Boost-1.89.0 || echo "Directory not found"
+
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.2.1
         env:
