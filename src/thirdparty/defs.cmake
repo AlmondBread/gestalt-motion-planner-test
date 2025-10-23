@@ -14,11 +14,13 @@ add_compile_definitions(
 if(POLICY CMP0167)
   cmake_policy(SET CMP0167 OLD)
 endif()
+#find_package(Boost 1.58 QUIET REQUIRED COMPONENTS serialization filesystem system program_options)
 find_package(Boost 1.58 QUIET REQUIRED COMPONENTS serialization filesystem program_options)
 include_directories(SYSTEM ${Boost_INCLUDE_DIR})
 set( OMPL_DEPENDS
 	${Boost_SERIALIZATION_LIBRARY}
 	${Boost_FILESYSTEM_LIBRARY}
+	# ${Boost_SYSTEM_LIBRARY}
 	${CMAKE_THREAD_LIBS_INIT}
 )
 
