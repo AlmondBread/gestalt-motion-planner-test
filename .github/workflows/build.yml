@@ -18,16 +18,16 @@ jobs:
     strategy:
       matrix:
         include:
-          # - os: linux-intel
-          #   runs-on: ubuntu-latest
+          - os: linux-intel
+            runs-on: ubuntu-latest
           # - os: linux-arm
           #   runs-on: ubuntu-24.04-arm
           # - os: windows-intel
           #   runs-on: windows-latest
           # - os: windows-arm
           #   runs-on: windows-11-arm
-          - os: macos-intel
-            runs-on: macos-15-intel
+          # - os: macos-intel
+          #   runs-on: macos-15-intel
           # - os: macos-arm
           #   runs-on: macos-latest
 
@@ -49,6 +49,7 @@ jobs:
           CIBW_ENVIRONMENT: BOOST_ROOT=${{ steps.install-boost.outputs.BOOST_ROOT }}
           CIBW_ENVIRONMENT_WINDOWS: BOOST_ROOT_PIPELINE=${{ steps.install-boost.outputs.BOOST_ROOT }}
           CIBW_ENVIRONMENT_PASS_LINUX: BOOST_ROOT
+          CIBW_BEFORE_BUILD_LINUX: apt update && apt install -y libboost-serialization-dev libboost-filesystem-dev libboost-system-dev libboost-program-options-dev libboost-test-dev
 
       - uses: actions/upload-artifact@v4
         with:
