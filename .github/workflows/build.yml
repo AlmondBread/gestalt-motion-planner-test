@@ -53,6 +53,10 @@ jobs:
           # CIBW_ENVIRONMENT: BOOST_ROOT=${{ steps.install-boost.outputs.BOOST_ROOT }}
           # CIBW_ENVIRONMENT_WINDOWS: BOOST_ROOT_PIPELINE=${{ steps.install-boost.outputs.BOOST_ROOT }}
           # CIBW_ENVIRONMENT_PASS_LINUX: BOOST_ROOT
+          CIBW_ENVIRONMENT_MACOS: |
+            BOOST_ROOT=/usr/local
+            BOOST_INCLUDEDIR=/usr/local/include
+            BOOST_LIBRARYDIR=/usr/local/lib
           CIBW_BUILD: "cp38-* cp314-*"
           CIBW_SKIP: "*musllinux*"
           CIBW_BEFORE_BUILD_LINUX: "yum install -y boost-devel"
