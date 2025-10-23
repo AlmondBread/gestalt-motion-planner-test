@@ -45,6 +45,16 @@ jobs:
         if: runner.os == 'macOS'
         run: brew install boost
 
+      - name: Inspect Boost installation
+        if: runner.os == 'macOS'
+        run: |
+          echo "==== BoostConfig.cmake content ===="
+          cat /usr/local/lib/cmake/Boost-1.89.0/BoostConfig.cmake || echo "BoostConfig.cmake not found"
+
+          echo ""
+          echo "==== Searching for boost_systemConfig.cmake or boost_system-config.cmake ===="
+          find /usr/local -type f \( -name "boost_systemConfig.cmake" -o -name "boost_system-config.cmake" \) || echo "No per-component BoostConfig found"
+
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.2.1
         env:
