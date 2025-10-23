@@ -34,22 +34,23 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Install Boost
-        uses: MarkusJx/install-boost@v2
-        id: install-boost
-        with:
-          boost_version: 1.89.0
-          boost_install_dir: ${{ matrix.boost_install_dir }}
+      # - name: Install Boost
+      #   uses: MarkusJx/install-boost@v2
+      #   id: install-boost
+      #   with:
+      #     boost_version: 1.89.0
+      #     boost_install_dir: ${{ matrix.boost_install_dir }}
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.2.1
         env:
           CIBW_PLATFORM: ${{ matrix.platform || 'auto' }}
           CIBW_ARCHS: ${{ matrix.archs || 'auto' }}
-          CIBW_ENVIRONMENT: BOOST_ROOT=${{ steps.install-boost.outputs.BOOST_ROOT }}
-          CIBW_ENVIRONMENT_WINDOWS: BOOST_ROOT_PIPELINE=${{ steps.install-boost.outputs.BOOST_ROOT }}
-          CIBW_ENVIRONMENT_PASS_LINUX: BOOST_ROOT
+          # CIBW_ENVIRONMENT: BOOST_ROOT=${{ steps.install-boost.outputs.BOOST_ROOT }}
+          # CIBW_ENVIRONMENT_WINDOWS: BOOST_ROOT_PIPELINE=${{ steps.install-boost.outputs.BOOST_ROOT }}
+          # CIBW_ENVIRONMENT_PASS_LINUX: BOOST_ROOT
           CIBW_BEFORE_BUILD_LINUX: "yum install -y boost-devel"
+          CIBW_ENVIRONMENT_PASS_LINUX: "BOOST_ROOT=/usr CMAKE_PREFIX_PATH=/usr"
 
       - uses: actions/upload-artifact@v4
         with:
