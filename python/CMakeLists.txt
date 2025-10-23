@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
+
+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum macOS deployment version")
+
 project(GestaltPlannerPythonBindings)
 
 add_subdirectory(../src/planner ${CMAKE_CURRENT_BINARY_DIR}/../src/planner)
