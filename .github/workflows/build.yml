@@ -22,12 +22,12 @@ jobs:
           #   runs-on: ubuntu-latest
           # - os: linux-arm
           #   runs-on: ubuntu-24.04-arm
-          - os: windows-intel
-            runs-on: windows-latest
+          # - os: windows-intel
+          #   runs-on: windows-latest
           # - os: windows-arm
           #   runs-on: windows-11-arm
-          # - os: macos-intel
-          #   runs-on: macos-15-intel
+          - os: macos-intel
+            runs-on: macos-15-intel
           # - os: macos-arm
           #   runs-on: macos-latest
 
@@ -38,13 +38,16 @@ jobs:
         uses: MarkusJx/install-boost@v2
         with:
           boost_version: 1.89.0
+          boost_install_dir: ${{ matrix.boost_install_dir }}
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.2.1
         env:
           CIBW_PLATFORM: ${{ matrix.platform || 'auto' }}
           CIBW_ARCHS: ${{ matrix.archs || 'auto' }}
-          BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
+          CIBW_ENVIRONMENT: BOOST_ROOT=${{ steps.install-boost.outputs.BOOST_ROOT }}
+          CIBW_ENVIRONMENT_WINDOWS: BOOST_ROOT_PIPELINE=${{ steps.install-boost.outputs.BOOST_ROOT }}
+          CIBW_ENVIRONMENT_PASS_LINUX: BOOST_ROOT
 
       - uses: actions/upload-artifact@v4
         with:
