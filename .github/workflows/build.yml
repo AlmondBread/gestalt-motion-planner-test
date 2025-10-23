@@ -20,44 +20,31 @@ jobs:
         include:
           - os: linux-intel
             runs-on: ubuntu-latest
-          - os: linux-arm
-            runs-on: ubuntu-24.04-arm
+        #   - os: linux-arm
+        #     runs-on: ubuntu-24.04-arm
         #   - os: windows-intel
         #     runs-on: windows-latest
         #   - os: windows-arm
         #     runs-on: windows-11-arm
-          - os: macos-intel
-            runs-on: macos-15-intel
-          - os: macos-arm
-            runs-on: macos-latest
+        #   - os: macos-intel
+        #     runs-on: macos-15-intel
+        #   - os: macos-arm
+        #     runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v5
 
-      - name: Install Linux dependencies
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libboost-serialization-dev \
-            libboost-filesystem-dev \
-            libboost-system-dev \
-            libboost-program-options-dev \
-            libboost-test-dev
-
-      - name: Install macOS dependencies
-        if: runner.os == 'macOS'
-        run: brew install boost
-
-      - name: Install Windows dependencies
-        if: runner.os == 'Windows'
-        run: choco install boost -y
+      - name: Install Boost
+        uses: MarkusJx/install-boost@v2
+        with:
+          boost_version: 1.89.0
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.2.1
         env:
           CIBW_PLATFORM: ${{ matrix.platform || 'auto' }}
           CIBW_ARCHS: ${{ matrix.archs || 'auto' }}
+          BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
 
       - uses: actions/upload-artifact@v4
         with:
