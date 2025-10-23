@@ -51,8 +51,13 @@ private:
 		else {
 			// this guarantees that the output represents the exact same double
 			std::array<char, 64> chars;
-			auto result = std::to_chars(chars.data(), chars.data() + chars.size(), arg);
-			buffer << std::string(chars.data(), result.ptr - chars.data());
+			#ifdef __APPLE__
+				std::snprintf(chars, sizeof(chars), "%.17g", arg);
+				buffer << chars;
+			#else
+				auto result = std::to_chars(chars.data(), chars.data() + chars.size(), arg);
+				buffer << std::string(chars.data(), result.ptr - chars.data());
+			#endif
 		};
 	}
 
