@@ -11,10 +11,6 @@ add_executable(pybindgenerator
 	pybindgenerator.cpp
 )
 
-if(MSVC)
-    target_compile_options(pybindgenerator PRIVATE /Zc:__cplusplus)
-endif()
-
 function(generate_python_bindings
 	TARGET
 	TARGET_FILE

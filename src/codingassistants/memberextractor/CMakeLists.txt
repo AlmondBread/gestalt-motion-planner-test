@@ -11,10 +11,6 @@ add_executable(memberextractor
 	memberextractor.cpp
 )
 
-if(MSVC)
-    target_compile_options(pybindgenerator PRIVATE /Zc:__cplusplus)
-endif()
-
 function(extract_members
 	TARGET
 	CLASS_NAME
