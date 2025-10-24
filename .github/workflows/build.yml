@@ -18,54 +18,25 @@ jobs:
     strategy:
       matrix:
         include:
-          # - os: linux-intel
-          #   runs-on: ubuntu-latest
-          # - os: linux-arm
-          #   runs-on: ubuntu-24.04-arm
-          - os: windows-intel
-            runs-on: windows-latest
+          - os: linux-intel
+            runs-on: ubuntu-latest
+          - os: linux-arm
+            runs-on: ubuntu-24.04-arm
+          # - os: windows-intel
+          #   runs-on: windows-latest
           # - os: windows-arm
           #   runs-on: windows-11-arm
-          # - os: macos-intel
-          #   runs-on: macos-15-intel
-          # - os: macos-arm
-          #   runs-on: macos-latest
+          - os: macos-intel
+            runs-on: macos-15-intel
+          - os: macos-arm
+            runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v5
 
-      - name: Install Boost
-        if: runner.os == 'Windows'
-        uses: MarkusJx/install-boost@v2
-        id: install-boost
-        with:
-          boost_version: 1.89.0
-          boost_install_dir: ${{ matrix.boost_install_dir }}
-
-      # - name: Install Boost on Windows
-      #   if: runner.os == 'Windows'
-      #   run: choco install boost-msvc-14.3
-
       - name: Install Boost on macOS
         if: runner.os == 'macOS'
         run: brew install boost && rm -rf /usr/local/lib/cmake/Boost-* && ls -1 /usr/local/lib/libboost_*
-        # env:
-        #   MACOSX_DEPLOYMENT_TARGET: 10.15
-        # run: brew install boost --build-from-source && ls -1 /usr/local/lib/libboost_* && rm -rf /usr/local/lib/cmake/Boost-*
-
-      # - name: Inspect Boost installation
-      #   if: runner.os == 'macOS'
-      #   run: |
-      #     echo "==== BoostConfig.cmake content ===="
-      #     cat /usr/local/lib/cmake/Boost-1.89.0/BoostConfig.cmake || echo "BoostConfig.cmake not found"
-
-      #     echo ""
-      #     echo "==== Searching for boost_systemConfig.cmake or boost_system-config.cmake ===="
-      #     find /usr/local -type f \( -name "boost_systemConfig.cmake" -o -name "boost_system-config.cmake" \) || echo "No per-component BoostConfig found"
-
-      #     echo "==== /usr/local/lib/cmake/Boost-1.89.0/ directory tree ===="
-      #     brew install tree || true
-      #     tree /usr/local/lib/cmake/Boost-1.89.0 || echo "Directory not found"
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.2.1
@@ -85,11 +56,6 @@ jobs:
           CIBW_BEFORE_BUILD_LINUX: "yum install -y boost-devel" # install boost inside build container
           CIBW_ENVIRONMENT_PASS_LINUX: "BOOST_ROOT=/usr CMAKE_PREFIX_PATH=/usr"
           MACOSX_DEPLOYMENT_TARGET: 14.0
-          CMAKE_ARGS: >
-            -DBoost_INCLUDE_DIR=${{steps.install-boost.outputs.BOOST_ROOT}}/include
-            -DBoost_LIBRARY_DIRS=${{steps.install-boost.outputs.BOOST_ROOT}}/lib
-            -DCMAKE_CXX_FLAGS="/Zc:__cplusplus"
-          BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
 
       - uses: actions/upload-artifact@v4
         with:
@@ -128,3 +94,4 @@ jobs:
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
           repository-url: https://test.pypi.org/legacy/
+          verbose: true
