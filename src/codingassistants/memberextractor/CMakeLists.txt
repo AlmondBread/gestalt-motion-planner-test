@@ -7,13 +7,13 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 link_libraries(Threads::Threads)
 
-if(MSVC)
-    add_compile_options(/std:c++17 /Zc:__cplusplus)
-endif()
-
 add_executable(memberextractor
 	memberextractor.cpp
 )
+
+if(MSVC)
+    target_compile_options(pybindgenerator PRIVATE /Zc:__cplusplus)
+endif()
 
 function(extract_members
 	TARGET
