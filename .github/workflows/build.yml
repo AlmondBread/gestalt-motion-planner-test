@@ -34,19 +34,20 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      # - name: Install Boost
-      #   uses: MarkusJx/install-boost@v2
-      #   id: install-boost
-      #   with:
-      #     boost_version: 1.89.0
-      #     boost_install_dir: ${{ matrix.boost_install_dir }}
-
-      - name: Install Boost on macOS
+      - name: Install Boost
         if: runner.os == 'macOS'
-        # run: brew install boost && rm -rf /usr/local/lib/cmake/Boost-* && ls -1 /usr/local/lib/libboost_*
-        env:
-          MACOSX_DEPLOYMENT_TARGET: 10.15
-        run: brew install boost --build-from-source && ls -1 /usr/local/lib/libboost_* && rm -rf /usr/local/lib/cmake/Boost-*
+        uses: MarkusJx/install-boost@v2
+        id: install-boost
+        with:
+          boost_version: 1.89.0
+          boost_install_dir: ${{ matrix.boost_install_dir }}
+
+      # - name: Install Boost on macOS
+      #   if: runner.os == 'macOS'
+      #   # run: brew install boost && rm -rf /usr/local/lib/cmake/Boost-* && ls -1 /usr/local/lib/libboost_*
+      #   env:
+      #     MACOSX_DEPLOYMENT_TARGET: 10.15
+      #   run: brew install boost --build-from-source && ls -1 /usr/local/lib/libboost_* && rm -rf /usr/local/lib/cmake/Boost-*
 
       # - name: Inspect Boost installation
       #   if: runner.os == 'macOS'
