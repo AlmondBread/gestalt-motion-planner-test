@@ -51,7 +51,6 @@ jobs:
             BOOST_INCLUDEDIR=/usr/local/include
             BOOST_LIBRARYDIR=/usr/local/lib
             CMAKE_OSX_DEPLOYMENT_TARGET=10.15
-          CIBW_BUILD: "cp38-* cp314-*"
           CIBW_SKIP: "*musllinux*"
           CIBW_BEFORE_BUILD_LINUX: "yum install -y boost-devel" # install boost inside build container
           CIBW_ENVIRONMENT_PASS_LINUX: "BOOST_ROOT=/usr CMAKE_PREFIX_PATH=/usr"

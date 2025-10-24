@@ -1,6 +1,6 @@
 [project]
 name = "gestalt-motion-planner-test"
-version = "0.0.1"
+version = "0.0.2"
 description = "Gestalt Path Planner"
 authors = [
   { name = "Mirko Kunze" },
